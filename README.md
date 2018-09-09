@@ -1,4 +1,4 @@
-#Install Jira, Confluence and Bitbucket with Docker Compose
+# Install Jira, Confluence and Bitbucket with Docker Compose
 
 ## Create network
 
