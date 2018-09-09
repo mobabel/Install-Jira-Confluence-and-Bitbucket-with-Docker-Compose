@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  confluence:
+    image: blacklabelops/confluence
+    container_name: confluence
+    hostname: confluence
+    restart: unless-stopped
+    networks:
+      - atlassiannet
+    volumes:
+      - confluencedata:/var/atlassian/confluence
+    ports:
+      - '8093:8090'
+      - '8091:8091'
+    environment:
+      - 'CATALINA_OPTS= -Xms2g -Xmx3g'
+      - 'CATALINA_PARAMETER1=-Xms'
+      - 'CATALINA_PARAMETER_VALUE1=2g'
+      - 'CATALINA_PARAMETER2=-Xmx'
+      - 'CATALINA_PARAMETER_VALUE2=3g'
+      - 'CONFLUENCE_PROXY_NAME='
+      - 'CONFLUENCE_PROXY_PORT='
+      - 'CONFLUENCE_PROXY_SCHEME='
+      - 'CONFLUENCE_DELAYED_START='
+    labels:
+      com.blacklabelops.description: "Atlassian Confluence"
+      com.blacklabelops.service: "confluence"
+
+volumes:
+  confluencedata:
+    external: true
+
+networks:
+  atlassiannet:
+    external:
+      name: network-atlassian

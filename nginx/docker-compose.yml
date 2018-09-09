@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  nginx:
+    image: 'blacklabelops/nginx'
+    container_name: nginx
+    hostname: nginx
+    restart: unless-stopped
+    networks:
+      - atlassiannet
+    environment:
+      #- 'SERVER_NAME=_'
+      #- 'REVERSE_PROXY_LOCATION=/'
+      #- 'REVERSE_PROXY_PASS=http://www.heise.de'
+      - 'REVERSE_PROXY_BUFFERING='
+      - 'REVERSE_PROXY_BUFFERS='
+      - 'REVERSE_PROXY_BUFFERS_SIZE='
+
+      - 'SERVER1SERVER_NAME=jira.localhost'
+      - 'SERVER1REVERSE_PROXY_LOCATION1=/jira'
+      - 'SERVER1REVERSE_PROXY_PASS1=http://jira:8080'
+
+      - 'SERVER2SERVER_NAME=confluence.localhost'
+      - 'SERVER2REVERSE_PROXY_LOCATION1=/confluence'
+      - 'SERVER2REVERSE_PROXY_PASS1=http://confluence:8090'
+
+      - 'SERVER3SERVER_NAME=bitbucket.localhost'
+      - 'SERVER3REVERSE_PROXY_LOCATION1=/bitbucket'
+      - 'SERVER3REVERSE_PROXY_PASS1=http://bitbucket:7990'
+    ports:
+      - '80:80'
+    volumes:
+      - nginxdata:/home/nginx
+      - nginxwww:/var/lib/nginx/html
+      #- /var/nginx/nginx.conf:/etc/nginx/nginx.conf
+      #- /var/nginx/conf.d/site.conf:/etc/nginx/conf.d/site.conf
+
+volumes:
+  nginxdata:
+    external: true
+  nginxwww:
+    external: true
+
+networks:
+  atlassiannet:
+    external:
+      name: network-atlassian

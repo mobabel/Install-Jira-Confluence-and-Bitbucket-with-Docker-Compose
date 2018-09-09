@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  jira:
+    #depends_on:
+    #  - postgre_atlassian
+    image: blacklabelops/jira
+    container_name: jira
+    hostname: jira
+    restart: unless-stopped
+    networks:
+      - atlassiannet
+    volumes:
+      - jiradata:/var/atlassian/jira
+    ports:
+      - '8085:8080'
+    environment:
+      - 'JIRA_DATABASE_URL=postgresql://jiradbuser@postgre_atlassian/jiradb'
+      - 'JIRA_DB_PASSWORD=Jiaia921843kfaHWy'
+      - 'CATALINA_OPTS= -Xms2g -Xmx3g'
+      - 'JVM_MINIMUM_MEMORY=2g'
+      - 'JVM_MAXIMUM_MEMORY=3g'
+      - 'JIRA_PROXY_NAME='
+      - 'JIRA_PROXY_PORT='
+      - 'JIRA_PROXY_SCHEME='
+    logging:
+      # limit logs retained on host to 25MB
+      driver: "json-file"
+      options:
+        max-size: "500k"
+        max-file: "50"
+    labels:
+      com.blacklabelops.description: "Atlassian Jira"
+      com.blacklabelops.service: "jira"
+
+volumes:
+  jiradata:
+    external: true
+
+networks:
+  atlassiannet:
+    external:
+      name: network-atlassian
+	  

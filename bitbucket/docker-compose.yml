@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  bitbucket:
+    image: blacklabelops/bitbucket
+    container_name: bitbucket
+    hostname: bitbucket
+    restart: unless-stopped
+    networks:
+      - atlassiannet
+    volumes:
+      - bitbucketdata:/var/atlassian/bitbucket
+    ports:
+      - '7990:7990'
+    environment:
+      - 'CATALINA_OPTS= -Xms2g -Xmx3g'
+      - 'JVM_MINIMUM_MEMORY=2g'
+      - 'JVM_MAXIMUM_MEMORY=3g'
+      - 'BITBUCKET_PROXY_NAME='
+      - 'BITBUCKET_PROXY_PORT='
+      - 'BITBUCKET_PROXY_SCHEME='
+      - 'BITBUCKET_DELAYED_START='
+      - 'DOCKER_WAIT_HOST=postgre_atlassian'
+      - 'DOCKER_WAIT_PORT=5432'
+      - 'BITBUCKET_EMBEDDED_SEARCH=true'
+    labels:
+      com.blacklabelops.description: "Atlassian Bitbucket"
+      com.blacklabelops.service: "Bitbucket"
+
+volumes:
+  bitbucketdata:
+    external: true
+
+networks:
+  atlassiannet:
+    external:
+      name: network-atlassian

@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  
+  postgre_atlassian:
+    image: blacklabelops/postgres
+    container_name: postgre_atlassian
+    hostname: postgre_atlassian
+    restart: unless-stopped
+    networks:
+      - atlassiannet
+    volumes:
+      - /var/postgre_atlassian/data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    environment:
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=QksuYejx_speI93'
+      - 'POSTGRES_ENCODING=UNICODE'
+      - 'POSTGRES_COLLATE=C'
+      - 'POSTGRES_COLLATE_TYPE=C'
+    logging:
+      # limit logs retained on host to 25MB
+      driver: "json-file"
+      options:
+        max-size: "500k"
+        max-file: "50"
+    labels:
+      com.blacklabelops.description: "Postgre Atlassian Database Server"
+      com.blacklabelops.service: "postgre_atlassian"
+
+networks:
+  atlassiannet:
+    external:
+      name: network-atlassian
